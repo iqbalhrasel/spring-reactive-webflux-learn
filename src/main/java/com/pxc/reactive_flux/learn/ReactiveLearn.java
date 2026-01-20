@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ReactiveLearn {
-    static void main() {
-        run();
-    }
+//    static void main() {
+//        run();
+//    }
 
     private Mono<String> mono(){
         return Mono.just("hello java").log();
@@ -108,7 +108,9 @@ public class ReactiveLearn {
                 });
 
 //        return flux.onErrorContinue(((throwable, o) -> System.out.println("dont worry: "+o)));
-        return flux.onErrorReturn(-1);
+//        return flux.onErrorReturn(-1);
+//        return flux.onErrorResume(_ -> Flux.range(31, 6));
+        return flux.onErrorMap(t -> new IllegalArgumentException(t.getMessage()));
     }
 
     private static void run() {
