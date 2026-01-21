@@ -14,3 +14,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/pg_db
     user: postgres
     password: admin
+logging:
+  level:
+    org.springframework.r2dbc.core: DEBUG

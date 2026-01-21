@@ -21,4 +21,35 @@ public class CategoryHandler {
                             .flatMap(dto ->
                                     ServerResponse.status(HttpStatus.CREATED).bodyValue(dto)));
     }
+
+    public Mono<ServerResponse> updateCategory(ServerRequest serverRequest) {
+        var id = Integer.valueOf(serverRequest.pathVariable("id"));
+        return serverRequest
+                .bodyToMono(CategoryUpdateRequest.class)
+                .flatMap(request ->
+                        categoryService
+                                .updateCategory(id, request)
+                                .flatMap(dto ->
+                                        ServerResponse.status(HttpStatus.CREATED).bodyValue(dto)));
+    }
+
+    public Mono<ServerResponse> getAllCategories(ServerRequest serverRequest) {
+        return ServerResponse
+                .ok()
+                .body(categoryService.getAllCategories(), CategoryDto.class);
+    }
+
+    public Mono<ServerResponse> getCategory(ServerRequest serverRequest) {
+        var id = Integer.valueOf(serverRequest.pathVariable("id"));
+        return categoryService
+                .getCategory(id)
+                .flatMap(dto -> ServerResponse.ok().bodyValue(dto));
+    }
+
+    public Mono<ServerResponse> getCategoryWithProducts(ServerRequest serverRequest) {
+        var id = Integer.valueOf(serverRequest.pathVariable("id"));
+        return ServerResponse
+                .ok()
+                .body(categoryService.getCategoryWithProducts(id), CategoryWithProductsDto.class);
+    }
 }
