@@ -4,6 +4,7 @@ import com.pxc.reactive_flux.categories.CategoryNotFoundException;
 import com.pxc.reactive_flux.categories.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @AllArgsConstructor
@@ -24,5 +25,18 @@ public class ProductService {
                     }
                     else throw new CategoryNotFoundException();
                 });
+    }
+
+    public Flux<ProductDto> getAllProducts() {
+        return crudRepository
+                .findAll()
+                .map(p -> productMapper.toDto(p));
+    }
+
+    public Mono<ProductDto> getProduct(Integer id) {
+        return crudRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new ProductNotFoundException()))
+                .map(p -> productMapper.toDto(p));
     }
 }
