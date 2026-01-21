@@ -4,6 +4,7 @@ import com.pxc.reactive_flux.categories.CategoryNotFoundException;
 import com.pxc.reactive_flux.categories.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -38,5 +39,28 @@ public class ProductService {
                 .findById(id)
                 .switchIfEmpty(Mono.error(new ProductNotFoundException()))
                 .map(p -> productMapper.toDto(p));
+    }
+
+    public Mono<ProductDto> updateProduct(Integer id, ProductUpdateRequest request) {
+        return categoryRepository
+                .findById(request.getCategoryId())
+                .switchIfEmpty(Mono.error(new CategoryNotFoundException()))
+                .flatMap(category -> crudRepository
+                            .findById(id)
+                            .switchIfEmpty(Mono.error(new ProductNotFoundException()))
+                            .flatMap(product -> {
+                                productMapper.updateEntity(product, request);
+                                return crudRepository
+                                        .save(product)
+                                        .map(p -> productMapper.toDto(p));
+                            })
+                );
+    }
+
+    public Mono<Void> deleteProduct(Integer id) {
+        return crudRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new ProductNotFoundException()))
+                .flatMap(p -> crudRepository.delete(p));
     }
 }

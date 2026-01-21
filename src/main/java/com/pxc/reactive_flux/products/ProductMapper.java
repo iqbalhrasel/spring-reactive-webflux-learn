@@ -16,6 +16,15 @@ public class ProductMapper {
         return product;
     }
 
+    public void updateEntity(Product product, ProductUpdateRequest request) {
+        if(request == null)
+            return;
+
+        product.setCategoryId(request.getCategoryId());
+        product.setName(request.getName());
+        product.setPrice(request.getPrice());
+    }
+
     public ProductDto toDto(Product product, Integer id) {
         var dto = new ProductDto();
         dto.setCategoryId(product.getCategoryId());

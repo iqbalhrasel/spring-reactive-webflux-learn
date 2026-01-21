@@ -10,5 +10,5 @@ create table products(
     name varchar(255),
     price decimal(10,2),
     primary key(id),
-    foreign key(category_id) references categories(id)
+    foreign key(category_id) references categories(id) on delete cascade
 );

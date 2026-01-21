@@ -26,7 +26,9 @@ public class CategoryRouter {
                                 .GET("/{id}", handler::getCategory)
                                 .GET("/{id}/products", handler::getCategoryWithProducts)
                                 .POST("", handler::createCategory)
-                                .PUT("/{id}", handler::updateCategory))
+                                .PUT("/{id}", handler::updateCategory)
+                                .DELETE("/{id}", handler::deleteCategory)
+                )
                 .filter(exceptionHandler.handleErrors())
                 .build();
     }

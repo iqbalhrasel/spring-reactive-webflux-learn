@@ -35,4 +35,21 @@ public class ProductHandler {
                 .getProduct(id)
                 .flatMap(dto -> ServerResponse.ok().bodyValue(dto));
     }
+
+    public Mono<ServerResponse> updateProduct(ServerRequest serverRequest) {
+        var id = Integer.valueOf(serverRequest.pathVariable("id"));
+        return serverRequest
+                .bodyToMono(ProductUpdateRequest.class)
+                .flatMap(request ->
+                        productService.updateProduct(id, request)
+                                .flatMap(dto -> ServerResponse.ok().bodyValue(dto))
+                );
+    }
+
+    public Mono<ServerResponse> deleteProduct(ServerRequest serverRequest) {
+        var id = Integer.valueOf(serverRequest.pathVariable("id"));
+        return productService
+                .deleteProduct(id)
+                .then(ServerResponse.noContent().build());
+    }
 }

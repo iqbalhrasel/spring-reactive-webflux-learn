@@ -22,6 +22,8 @@ public class ProductRouter {
                         .GET("", handler::getAllProducts)
                         .GET("/{id}", handler::getProduct)
                         .POST("", handler::createProduct)
+                        .PUT("/{id}", handler::updateProduct)
+                        .DELETE("/{id}", handler::deleteProduct)
                 )
                 .filter(exceptionHandler.handleErrors())
                 .build();

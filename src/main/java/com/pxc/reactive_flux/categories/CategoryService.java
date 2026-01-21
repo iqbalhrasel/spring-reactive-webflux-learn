@@ -68,4 +68,11 @@ public class CategoryService {
                     return new CategoryWithProductsDto(category.getId(), category.getName(), products);
                 });
     }
+
+    public Mono<Void> deleteCategory(Integer id) {
+        return categoryRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new CategoryNotFoundException()))
+                .flatMap(category -> categoryRepository.delete(category));
+    }
 }

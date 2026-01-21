@@ -52,4 +52,11 @@ public class CategoryHandler {
                 .ok()
                 .body(categoryService.getCategoryWithProducts(id), CategoryWithProductsDto.class);
     }
+
+    public Mono<ServerResponse> deleteCategory(ServerRequest serverRequest) {
+        var id = Integer.valueOf(serverRequest.pathVariable("id"));
+        return categoryService
+                .deleteCategory(id)
+                .then(ServerResponse.noContent().build());
+    }
 }
